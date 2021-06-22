@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Home Json</title>
+		<style>
+		h2{
+			text-align:center;
+		}
+		</style>
+		
+		<script>
+			function mostrainfo(str)//string UF
+			{
+				console.log(str);
+				if (str.length > 0)//verifica se ta vazio
+				{
+					let xmlhttp = new XMLHttpRequest(); //inicia o objeto
+					xmlhttp.onreadystatechange = function()//roda a funcao
+					{
+						console.log("ReadyState: " + this.readyState);
+						console.log("status: " + this.status);
+						
+						if(this.readyState == 4 && this.status == 200)
+						{
+							console.log("Retorno: " + this.responseText);
+							let obj = JSON.parse(this.responseText);
+							document.getElementById("resposta").value = this.responseText;
+							let cidad = document.getElementById("cidade");
+							for(i=0; i < obj.length; i++)
+							{
+								let city = new Option(obj[i],obj[i]);
+								cidad.options.add(city);
+							}
+						}
+					}
+					xmlhttp.open("GET", "http://localhost/3daw/chamadajson.php?estado="+ str, true);
+					xmlhttp.send();
+					console.log("Requisicao enviada");
+				}
+				else {
+					document.getElementById("resposta").value = "";
+				}
+			}
+		</script>
+	</head>
+<body>
+
+	<h2><b>Teste json</b></h2>
+	
+	<form>
+	  <br><br>Estado:
+	  <input type="text" id="estado" name="estado" onchange="mostrainfo(this.value)"/>
+	  
+	  <br><br>Resposta:
+	  <input type="text" id="resposta" name="resposta"/>
+	  
+	  <br><br>Cidade:<select id="cidade" value="cidade"></select>
+	  
+	  <br><br><input type="submit" value="Enviar Dados"/>
+	</form>
+	
+</body>
+</html>
